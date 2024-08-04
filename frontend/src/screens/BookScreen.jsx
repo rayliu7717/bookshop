@@ -5,7 +5,7 @@ import { Row, Col, Image, ListGroup, Card, Button,Form } from 'react-bootstrap';
 import Rating from '../components/Rating';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../slices/cartSlice';
-import { useGetBookDetailsQuery } from '../slices/bookSlice';
+import { useGetBookDetailsQuery } from '../slices/bookApiSlice';
 
 const BookScreen = () => {
     const { id: bookId } = useParams();

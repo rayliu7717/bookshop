@@ -1,6 +1,6 @@
 import { Row, Col } from 'react-bootstrap';
 import Book from '../components/Book';
-import { useGetBooksQuery } from '../slices/bookSlice';
+import { useGetBooksQuery } from '../slices/bookApiSlice';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 
