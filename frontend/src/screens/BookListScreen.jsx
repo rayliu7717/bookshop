@@ -3,13 +3,27 @@ import { Table, Button, Row, Col } from 'react-bootstrap';
 import { FaEdit, FaPlus, FaTrash } from 'react-icons/fa';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { useGetBooksQuery } from '../slices/bookApiSlice';
+import { useGetBooksQuery,useAddBookMutation } from '../slices/bookApiSlice';
+import { toast } from 'react-toastify';
 
 const BookListScreen = () => {
   const { data: books, isLoading, error, refetch } = useGetBooksQuery();
 
   const deleteHandler = () => {
     console.log('delete');
+  };
+
+  const [addBook, { isLoading: loadingAddBook }] =  useAddBookMutation();
+
+  const addBookHandler = async () => {
+    if (window.confirm('Are you sure you want to add a new book?')) {
+        try {
+        await addBook();
+        refetch();
+        } catch (err) {
+        toast.error(err?.data?.message || err.error);
+        }
+    }
   };
 
   return (
@@ -19,12 +33,13 @@ const BookListScreen = () => {
           <h1>Books</h1>
         </Col>
         <Col className='text-end'>
-          <Button className='btn-sm m-3'>
-            <FaPlus /> Create Book
+          <Button className='my-3' onClick={addBookHandler}>
+            <FaPlus /> Add Book
           </Button>
         </Col>
       </Row>
 
+      {loadingAddBook && <Loader />}
       {isLoading ? (
         <Loader />
       ) : error ? (

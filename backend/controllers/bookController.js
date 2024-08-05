@@ -22,4 +22,26 @@ const getBookById = asyncHandler(async (req, res) => {
     throw new Error('Resource not found');
 });
 
-export { getBooks, getBookById };
+
+// @desc    Add a book
+// @route   POST /api/books
+// @access  Private/Admin
+const addBook = asyncHandler(async (req, res) => {
+  const book = new Book({
+    name: 'Sample name',
+    price: 0,
+    user: req.user._id,
+    image: '/images/sample.jpg',
+    publisher: 'Sample publisher',
+    category: 'Sample category',
+    countInStock: 0,
+    numReviews: 0,
+    description: 'Sample description',
+  });
+
+  const addedBook = await book.save();
+  res.status(201).json(addedBook);
+});
+
+
+export { getBooks, getBookById,addBook };
