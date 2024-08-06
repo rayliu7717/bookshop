@@ -43,5 +43,30 @@ const addBook = asyncHandler(async (req, res) => {
   res.status(201).json(addedBook);
 });
 
+// @desc    Update a book
+// @route   PUT /api/books/:id
+// @access  Private/Admin
+const updateBook = asyncHandler(async (req, res) => {
+  const { name, price, description, image, publisher, category, countInStock } =
+    req.body;
 
-export { getBooks, getBookById,addBook };
+  const book = await Book.findById(req.params.id);
+
+  if (book) {
+    book.name = name;
+    book.price = price;
+    book.description = description;
+    book.image = image;
+    book.publisher = publisher;
+    book.category = category;
+    book.countInStock = countInStock;
+
+    const updatedBook = await book.save();
+    res.json(updatedBook);
+  } else {
+    res.status(404);
+    throw new Error('Book not found');
+  }
+});
+
+export { getBooks, getBookById,addBook, updateBook };
