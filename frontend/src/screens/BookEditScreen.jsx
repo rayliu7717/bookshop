@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import {
   useGetBookDetailsQuery,
   useUpdateBookMutation,
+  useUploadBookImageMutation
 } from '../slices/bookApiSlice';
 
 const BookEditScreen = () => {
@@ -29,6 +30,9 @@ const BookEditScreen = () => {
 
   const [updateBook, { isLoading: loadingUpdate }] =
     useUpdateBookMutation();
+
+  const [uploadBookImage, { isLoading: loadingUpload }] =
+    useUploadBookImageMutation();
 
   const navigate = useNavigate();
 
@@ -65,6 +69,18 @@ const BookEditScreen = () => {
     }
   }, [book]);
 
+  const uploadFileHandler = async (e) => {
+    const formData = new FormData();
+    formData.append('image', e.target.files[0]);
+    try {
+      const res = await uploadBookImage(formData).unwrap();
+      toast.success(res.message);
+      setImage(res.image);
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
+    }
+  };
+
   return (
     <>
       <Link to='/admin/booklist' className='btn btn-light my-3'>
@@ -100,6 +116,21 @@ const BookEditScreen = () => {
             </Form.Group>
 
             {/* IMAGE INPUT PLACEHOLDER */}
+            <Form.Group controlId='image'>
+              <Form.Label>Image</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Enter image url'
+                value={image}
+                onChange={(e) => setImage(e.target.value)}
+              ></Form.Control>
+              <Form.Control
+                label='Choose File'
+                onChange={uploadFileHandler}
+                type='file'
+              ></Form.Control>
+              {loadingUpload && <Loader />}
+            </Form.Group>
 
             <Form.Group controlId='publisher'>
               <Form.Label>Publisher</Form.Label>
