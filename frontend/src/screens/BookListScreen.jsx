@@ -3,14 +3,23 @@ import { Table, Button, Row, Col } from 'react-bootstrap';
 import { FaEdit, FaPlus, FaTrash } from 'react-icons/fa';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { useGetBooksQuery,useAddBookMutation } from '../slices/bookApiSlice';
+import { useGetBooksQuery,useAddBookMutation,useDeleteBookMutation } from '../slices/bookApiSlice';
 import { toast } from 'react-toastify';
 
 const BookListScreen = () => {
   const { data: books, isLoading, error, refetch } = useGetBooksQuery();
 
-  const deleteHandler = () => {
-    console.log('delete');
+  const [deleteBook, { isLoading: loadingDelete }] =  useDeleteBookMutation();
+
+  const deleteHandler = async (id) => {
+    if (window.confirm('Are you sure')) {
+      try {
+        await deleteBook(id);
+        refetch();
+      } catch (err) {
+        toast.error(err?.data?.message || err.error);
+      }
+    }
   };
 
   const [addBook, { isLoading: loadingAddBook }] =  useAddBookMutation();
@@ -40,6 +49,8 @@ const BookListScreen = () => {
       </Row>
 
       {loadingAddBook && <Loader />}
+      {loadingDelete && <Loader />}
+      
       {isLoading ? (
         <Loader />
       ) : error ? (
