@@ -4,10 +4,10 @@ import { apiSlice } from './apiSlice';
 export const bookSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getBooks: builder.query({
-      query: () => ({
+      query: ({ pageNumber }) => ({
         url: BOOKS_URL,
+        params: { pageNumber },
       }),
-      providesTags: ['Book'],
       keepUnusedDataFor: 5,
     }),
     getBookDetails: builder.query({
@@ -48,6 +48,14 @@ export const bookSlice = apiSlice.injectEndpoints({
       }),
       providesTags: ['Book'],
     }),
+    createReview: builder.mutation({
+      query: (data) => ({
+        url: `${BOOKS_URL}/${data.bookId}/reviews`,
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Book'],
+    }),
 
   }),
 });
@@ -57,4 +65,6 @@ export const { useGetBooksQuery,
   useAddBookMutation,
   useUpdateBookMutation,
   useUploadBookImageMutation,
-  useDeleteBookMutation } = bookSlice;
+  useDeleteBookMutation,
+  useCreateReviewMutation
+ } = bookSlice;
