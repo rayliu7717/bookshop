@@ -21,6 +21,7 @@ import AdminRoute from './components/AdminRoute';
 import BookListScreen from './screens/BookListScreen';
 import BookEditScreen from './screens/BookEditScreen';
 import UserListScreen from './screens/UserListScreen';
+import UserEditScreen from './screens/UserEditScreen';
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -45,6 +46,7 @@ export const router = createBrowserRouter(
           <Route path='/admin/booklist' element={<BookListScreen />} />
           <Route path='/admin/book/:id/edit' element={<BookEditScreen />} />
           <Route path='/admin/userlist' element={<UserListScreen />} />
+          <Route path='/admin/user/:id/edit' element={<UserEditScreen />} />
         </Route>
       </Route>
     )
