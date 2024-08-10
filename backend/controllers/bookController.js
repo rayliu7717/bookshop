@@ -17,7 +17,7 @@ const getBooks = asyncHandler(async (req, res) =>{
   : {};
 
   // $options : 'i' case insesitive 
-  
+  const count = await Book.countDocuments({ ...keyword });
   const books = await Book.find({ ...keyword })
     .limit(pageSize)
     .skip(pageSize * (page - 1));
